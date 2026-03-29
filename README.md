@@ -1,4 +1,4 @@
-# SkyReward — Cashback vs Points Calculator
+# SkyCash — Cashback vs Points Calculator
 
 A static web calculator that helps you determine whether earning airline miles/points or taking cashback rewards is the better financial strategy for your credit card spending.
 
@@ -48,6 +48,7 @@ cashback-vs-points/
 Open `index.html` in any browser. No server required — it works directly from the filesystem via `file://`.
 
 Fill in your spending details:
+
 1. **Your Spending** — monthly or yearly spend amount
 2. **Cashback Card** — annual fee (shared or per-rate)
 3. **Points/Miles Card** — fee, earning rate, purchase price, transfer settings
@@ -81,6 +82,7 @@ npm run test:watch
 ## Design
 
 Dark luxury travel-themed interface with:
+
 - DM Serif Display / DM Sans typography
 - Navy and gold color palette
 - CSS-only animated background elements (rotating globe, flight routes, floating planes, pulsing city dots, passport stamp)
