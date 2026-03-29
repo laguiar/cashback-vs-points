@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyCash — Cashback vs Points Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Decorative background elements -->
+  <div class="bg-decor" aria-hidden="true">
+    <div class="bg-globe"></div>
+    <div class="bg-route bg-route--1"></div>
+    <div class="bg-route bg-route--2"></div>
+    <div class="bg-plane bg-plane--1">&#9992;</div>
+    <div class="bg-plane bg-plane--2">&#9992;</div>
+    <div class="bg-dot bg-dot--1"></div>
+    <div class="bg-dot bg-dot--2"></div>
+    <div class="bg-dot bg-dot--3"></div>
+    <div class="bg-ring bg-ring--1"></div>
+    <div class="bg-ring bg-ring--2"></div>
+    <svg class="bg-stamp" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="55" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/><circle cx="60" cy="60" r="46" stroke="currentColor" stroke-width="1"/><text x="60" y="56" text-anchor="middle" fill="currentColor" font-size="10" font-weight="700" letter-spacing="3">FIRST</text><text x="60" y="70" text-anchor="middle" fill="currentColor" font-size="10" font-weight="700" letter-spacing="3">CLASS</text></svg>
+  </div>
+
+  <header class="hero">
+    <div class="hero-badge">&#9992; REWARDS CALCULATOR</div>
+    <h1>Should you earn <em>miles</em> or take the <em>cashback</em>?</h1>
+    <p class="subtitle">Enter your spending habits below and find out which credit card rewards strategy actually puts more value back in your wallet.</p>
+  </header>
+
+  <main>
+    <div class="inputs-container">
+      <!-- Spend Section -->
+      <section class="card card--spend">
+        <div class="card-icon">&#128184;</div>
+        <h2>Your Spending</h2>
+
+        <div class="field">
+          <label for="spend-amount">Spend amount</label>
+          <div class="input-with-toggle">
+            <input type="text" inputmode="decimal" id="spend-amount" min="0" step="any" placeholder="e.g. 2,000">
+            <div class="toggle" role="radiogroup" aria-label="Spend period">
+              <button type="button" class="toggle-btn active" data-value="monthly" aria-pressed="true">Monthly</button>
+              <button type="button" class="toggle-btn" data-value="yearly" aria-pressed="false">Yearly</button>
+            </div>
+          </div>
+          <span class="hint">Amount in any currency</span>
+        </div>
+      </section>
+
+      <!-- Cashback Card Section -->
+      <section class="card card--cashback">
+        <div class="card-icon">&#128179;</div>
+        <h2>Cashback Alternatives</h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.25rem;">Compare your travel card against standard cash back alternatives (e.g., Citi Double Cash, Amex Blue Cash, Ether.fi).</p>
+
+        <div class="compact-row">
+          <div class="field">
+            <label for="cashback-card-fee">Card fee</label>
+            <div class="input-with-toggle">
+              <input type="text" inputmode="decimal" id="cashback-card-fee" min="0" step="any" placeholder="e.g. 0" value="0">
+              <div class="toggle" role="radiogroup" aria-label="Cashback fee period">
+                <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Monthly</button>
+                <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yearly</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cashback-rates-info">
+            <span class="label">Rates compared:</span>
+            <span class="rates-badges">
+              <span class="badge">1%</span>
+              <span class="badge">1.5%</span>
+              <span class="badge">2%</span>
+              <span class="badge">3%</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top: 1rem;">
+          <label class="toggle-label-row">
+            <input type="checkbox" id="per-rate-fees-toggle">
+            <span>Different fee per rate</span>
+          </label>
+        </div>
+
+        <div id="per-rate-fields" class="conditional-fields hidden">
+          <div class="per-rate-grid">
+            <div class="field">
+              <label for="cb-fee-1">1% card fee</label>
+              <div class="input-with-toggle">
+                <input type="text" inputmode="decimal" id="cb-fee-1" min="0" step="any" placeholder="e.g. 0" value="0">
+                <div class="toggle" role="radiogroup" aria-label="CB 1% fee period">
+                  <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Mo</button>
+                  <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yr</button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cb-fee-15">1.5% card fee</label>
+              <div class="input-with-toggle">
+                <input type="text" inputmode="decimal" id="cb-fee-15" min="0" step="any" placeholder="e.g. 0" value="0">
+                <div class="toggle" role="radiogroup" aria-label="CB 1.5% fee period">
+                  <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Mo</button>
+                  <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yr</button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cb-fee-2">2% card fee</label>
+              <div class="input-with-toggle">
+                <input type="text" inputmode="decimal" id="cb-fee-2" min="0" step="any" placeholder="e.g. 0" value="0">
+                <div class="toggle" role="radiogroup" aria-label="CB 2% fee period">
+                  <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Mo</button>
+                  <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yr</button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cb-fee-3">3% card fee</label>
+              <div class="input-with-toggle">
+                <input type="text" inputmode="decimal" id="cb-fee-3" min="0" step="any" placeholder="e.g. 0" value="0">
+                <div class="toggle" role="radiogroup" aria-label="CB 3% fee period">
+                  <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Mo</button>
+                  <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yr</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Points/Miles Card Section -->
+      <section class="card card--miles">
+        <div class="card-icon">&#9992;</div>
+        <h2>Your Travel Card</h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.25rem;">Enter the details of the points or miles card you want to evaluate (e.g., Chase Sapphire Preferred, Amex Platinum).</p>
+
+        <div class="field">
+          <label for="points-card-fee">Card fee</label>
+          <div class="input-with-toggle">
+            <input type="text" inputmode="decimal" id="points-card-fee" min="0" step="any" placeholder="e.g. 250" value="0">
+            <div class="toggle" role="radiogroup" aria-label="Points fee period">
+              <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Monthly</button>
+              <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yearly</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Earning type</label>
+          <div class="toggle" role="radiogroup" aria-label="Earning type">
+            <button type="button" class="toggle-btn active" data-value="miles" aria-pressed="true">Airline Miles</button>
+            <button type="button" class="toggle-btn" data-value="points" aria-pressed="false">Points</button>
+          </div>
+          <span class="hint" style="margin-top: 0.6rem;"><strong>Miles:</strong> Co-branded airline cards (e.g. Delta SkyMiles).<br><strong>Points:</strong> Transferable bank rewards (e.g. Revolut, Chase).</span>
+        </div>
+
+        <div class="field">
+          <label for="earnings-rate">Rewards earned per 1 (€$£) spent</label>
+          <input type="text" inputmode="decimal" id="earnings-rate" value="1.0" min="0" step="any" placeholder="e.g. 1.5">
+          <span class="hint">Points or miles earned per unit spent (e.g. 0.5, 1.5 or 2)</span>
+        </div>
+
+        <div class="field">
+          <label for="purchase-price">Estimated purchase value of points / miles</label>
+          <div class="input-with-toggle">
+            <input type="text" inputmode="decimal" id="purchase-price" value="15" min="0" step="any" placeholder="e.g. 15">
+            <div class="toggle" role="radiogroup" aria-label="Price unit">
+              <button type="button" class="toggle-btn active" data-value="per-thousand" aria-pressed="true">Per 1,000</button>
+              <button type="button" class="toggle-btn" data-value="per-unit" aria-pressed="false">Each</button>
+            </div>
+          </div>
+          <span class="hint">How much they are worth in cash (e.g., €15 per 1,000 or 0.015 each)</span>
+        </div>
+
+        <div class="field" style="max-width: 320px;">
+          <label for="min-buyable">Minimum points block <span class="label-detail">(in thousands)</span></label>
+          <input type="text" inputmode="numeric" id="min-buyable" value="1" placeholder="e.g. 15">
+          <span class="hint">Enter 1 for 1,000 — enter 15 for 15,000</span>
+        </div>
+
+        <!-- Points-specific fields -->
+        <div id="points-fields" class="conditional-fields hidden">
+          <div class="field">
+            <label for="transfer-ratio">Transfer ratio <span class="label-detail">(points to miles)</span></label>
+            <input type="text" id="transfer-ratio" placeholder="e.g. 1:1" value="1:1">
+            <span class="hint">Accepted formats: 1:1, 5:4, 1000:750, 0.8, or 80%</span>
+            <span class="hint" id="transfer-ratio-preview"></span>
+          </div>
+
+          <div class="field">
+            <label for="transfer-bonus">Transfer bonus <span class="label-detail">(optional)</span></label>
+            <div class="input-with-suffix">
+              <input type="text" inputmode="decimal" id="transfer-bonus" min="0" step="any" placeholder="e.g. 25" value="0">
+              <span class="suffix">%</span>
+            </div>
+            <span class="hint">Bonus when transferring to airline partners</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Results Section -->
+    <section id="results" class="results-section">
+      <h2>&#9992; Annual Comparison</h2>
+
+      <div id="winner-banner" class="winner-banner hidden">
+        <span class="winner-icon">&#127942;</span>
+        <span id="winner-text"></span>
+      </div>
+
+      <div class="results-table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th id="col-points-header">Miles</th>
+              <th>CB 1%</th>
+              <th>CB 1.5%</th>
+              <th>CB 2%</th>
+              <th>CB 3%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total value earned</td>
+              <td id="r-points-gross-annual">&mdash;</td>
+              <td id="r-cb1-gross-annual">&mdash;</td>
+              <td id="r-cb15-gross-annual">&mdash;</td>
+              <td id="r-cb2-gross-annual">&mdash;</td>
+              <td id="r-cb3-gross-annual">&mdash;</td>
+            </tr>
+            <tr class="row-highlight">
+              <td>Net annual value <span class="hint-inline" title="Total value earned minus annual card fee"> (?)</span></td>
+              <td id="r-points-net-annual">&mdash;</td>
+              <td id="r-cb1-net-annual">&mdash;</td>
+              <td id="r-cb15-net-annual">&mdash;</td>
+              <td id="r-cb2-net-annual">&mdash;</td>
+              <td id="r-cb3-net-annual">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Net monthly value</td>
+              <td id="r-points-net-monthly">&mdash;</td>
+              <td id="r-cb1-net-monthly">&mdash;</td>
+              <td id="r-cb15-net-monthly">&mdash;</td>
+              <td id="r-cb2-net-monthly">&mdash;</td>
+              <td id="r-cb3-net-monthly">&mdash;</td>
+            </tr>
+            <tr class="row-separator">
+              <td>Effective cost per 1k miles</td>
+              <td id="r-points-effective-cost">&mdash;</td>
+              <td id="r-cb1-effective-cost">&mdash;</td>
+              <td id="r-cb15-effective-cost">&mdash;</td>
+              <td id="r-cb2-effective-cost">&mdash;</td>
+              <td id="r-cb3-effective-cost">&mdash;</td>
+            </tr>
+            <tr class="row-separator">
+              <td id="r-miles-earned-label">Miles earned</td>
+              <td id="r-points-miles-earned">&mdash;</td>
+              <td id="r-cb1-miles-buyable">&mdash;</td>
+              <td id="r-cb15-miles-buyable">&mdash;</td>
+              <td id="r-cb2-miles-buyable">&mdash;</td>
+              <td id="r-cb3-miles-buyable">&mdash;</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Difference</td>
+              <td id="r-points-diff">&mdash;</td>
+              <td id="r-cb1-diff">&mdash;</td>
+              <td id="r-cb15-diff">&mdash;</td>
+              <td id="r-cb2-diff">&mdash;</td>
+              <td id="r-cb3-diff">&mdash;</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Goal Accumulation Section -->
+    <section id="goal-section" class="results-section results-section--goal">
+      <h2>&#127919; Goal Accumulation</h2>
+
+      <div class="field" style="max-width: 320px; margin-bottom: 1.5rem;">
+        <label for="goal-target">Target miles to accumulate</label>
+        <input type="text" inputmode="numeric" id="goal-target" value="50,000" placeholder="e.g. 50000">
+        <span class="hint">Rounds to nearest 1,000</span>
+      </div>
+
+      <div id="goal-banner" class="winner-banner hidden">
+        <span class="winner-icon">&#127942;</span>
+        <span id="goal-banner-text"></span>
+      </div>
+
+      <div class="results-table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th id="goal-col-points-header">Miles</th>
+              <th>CB 1%</th>
+              <th>CB 1.5%</th>
+              <th>CB 2%</th>
+              <th>CB 3%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Months to goal</td>
+              <td id="g-points-months">&mdash;</td>
+              <td id="g-cb1-months">&mdash;</td>
+              <td id="g-cb15-months">&mdash;</td>
+              <td id="g-cb2-months">&mdash;</td>
+              <td id="g-cb3-months">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Total spend</td>
+              <td id="g-points-spend">&mdash;</td>
+              <td id="g-cb1-spend">&mdash;</td>
+              <td id="g-cb15-spend">&mdash;</td>
+              <td id="g-cb2-spend">&mdash;</td>
+              <td id="g-cb3-spend">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Total fees paid</td>
+              <td id="g-points-fees">&mdash;</td>
+              <td id="g-cb1-fees">&mdash;</td>
+              <td id="g-cb15-fees">&mdash;</td>
+              <td id="g-cb2-fees">&mdash;</td>
+              <td id="g-cb3-fees">&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Disclaimers -->
+    <section class="disclaimers">
+      <h3 class="disclaimers-title">&#9432; Important to know</h3>
+      <ul class="disclaimers-list">
+        <li>Other card perks and benefits (lounge access, insurance, etc.) are not taken into consideration here.</li>
+        <li>This site does a pure mathematical comparison, for educational purposes only.</li>
+        <li>Every other earning strategy — as described in the <a href="https://laguiar.github.io/milhas/en/accumulation.html" target="_blank" rel="noopener">accumulation guide</a> — should be used in combination, independently of the credit card that you have.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>Built with &#10084;&#65039; in the chaotic Berlin</p>
+    </div>
+  </footer>
+
+  <script src="scripts/calc.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
