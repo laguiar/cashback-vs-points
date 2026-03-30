@@ -209,8 +209,19 @@
       }
     }
 
-    var spendAmount = num(els.spendAmount);
     var earningLabel = state.earningType === "points" ? "Points" : "Miles";
+
+    // Min buyable preview
+    var minBuyPreview = document.getElementById("min-buyable-preview");
+    if (minBuyPreview) {
+      if (els.minBuyable.value.trim() !== "") {
+        minBuyPreview.textContent = "= " + formatNumber(r.minBuy) + " " + earningLabel.toLowerCase();
+      } else {
+        minBuyPreview.textContent = "";
+      }
+    }
+
+    var spendAmount = num(els.spendAmount);
 
     // Render points/miles column (benchmark)
     setCell("r-points-gross-annual", r.grossMilesValue, false, false, true);

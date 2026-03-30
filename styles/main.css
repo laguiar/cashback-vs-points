@@ -279,7 +279,7 @@ header, main, footer {
 .hero-badge {
   display: inline-block;
   padding: 0.35rem 1rem;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -496,7 +496,8 @@ input[type="text"]:focus {
   cursor: help;
 }
 
-#transfer-ratio-preview {
+#transfer-ratio-preview,
+#min-buyable-preview {
   font-weight: 600;
   color: var(--gold);
 }

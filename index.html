@@ -157,7 +157,7 @@
             <button type="button" class="toggle-btn active" data-value="miles" aria-pressed="true">Airline Miles</button>
             <button type="button" class="toggle-btn" data-value="points" aria-pressed="false">Points</button>
           </div>
-          <span class="hint" style="margin-top: 0.6rem;"><strong>Miles:</strong> Co-branded airline cards (e.g. Delta SkyMiles).<br><strong>Points:</strong> Transferable bank rewards (e.g. Revolut, Chase).</span>
+          <span class="hint" style="margin-top: 0.6rem;"><strong>Miles:</strong> Co-branded airline cards (e.g. Delta SkyMiles, Lufthansa Miles & More).<br><strong>Points:</strong> Transferable bank rewards (e.g. Revolut, Chase).</span>
         </div>
 
         <div class="field">
@@ -178,10 +178,11 @@
           <span class="hint">How much they are worth in cash (e.g., €15 per 1,000 or 0.015 each)</span>
         </div>
 
-        <div class="field" style="max-width: 320px;">
-          <label for="min-buyable">Minimum points block <span class="label-detail">(in thousands)</span></label>
+        <div class="field" style="max-width: 380px;">
+          <label for="min-buyable">Minimum points/miles block for purchase <span class="label-detail">(in thousands)</span></label>
           <input type="text" inputmode="numeric" id="min-buyable" value="1" placeholder="e.g. 15">
           <span class="hint">Enter 1 for 1,000 — enter 15 for 15,000</span>
+          <span class="hint" id="min-buyable-preview"></span>
         </div>
 
         <!-- Points-specific fields -->
