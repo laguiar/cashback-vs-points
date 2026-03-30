@@ -910,6 +910,103 @@ footer {
   letter-spacing: 0.02em;
 }
 
+/* ── Input Ergonomics (Chips, Steppers, Sliders) ──── */
+
+.input-with-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.preset-chips {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chip {
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--gold);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+}
+
+.range-slider {
+  width: 100%;
+  max-width: 380px;
+  margin-top: 1rem;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.stepper-input {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.stepper-input:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-dim);
+  background: #ffffff;
+}
+
+.stepper-input input {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  flex: 1;
+}
+
+.stepper-input input:focus {
+  box-shadow: none;
+  background: transparent;
+}
+
+.stepper-btn {
+  width: 2.75rem;
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.stepper-btn:hover {
+  background: var(--gold-dim);
+  color: var(--gold);
+}
+
+.stepper-btn:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.stepper-btn:last-child {
+  border-left: 1px solid var(--border);
+}
+
 /* ── Responsive ──────────────────────────────────── */
 
 @media (max-width: 600px) {

@@ -162,12 +162,21 @@
 
         <div class="field">
           <label for="earnings-rate">Rewards earned per 1 (€$£) spent</label>
-          <input type="text" inputmode="decimal" id="earnings-rate" value="1.0" min="0" step="any" placeholder="e.g. 1.5">
+          <div class="input-with-chips">
+            <input type="text" inputmode="decimal" id="earnings-rate" value="1.0" min="0" step="any" placeholder="e.g. 1.5">
+            <div class="preset-chips">
+              <button type="button" class="chip" data-target="earnings-rate" data-value="0.5">0.5</button>
+              <button type="button" class="chip" data-target="earnings-rate" data-value="1.0">1.0</button>
+              <button type="button" class="chip" data-target="earnings-rate" data-value="1.5">1.5</button>
+              <button type="button" class="chip" data-target="earnings-rate" data-value="2.0">2.0</button>
+              <button type="button" class="chip" data-target="earnings-rate" data-value="3.0">3.0</button>
+            </div>
+          </div>
           <span class="hint">Points or miles earned per unit spent (e.g. 0.5, 1.5 or 2)</span>
         </div>
 
         <div class="field">
-          <label for="purchase-price">Estimated purchase value of points / miles</label>
+          <label for="purchase-price">Estimated purchase value of <span id="purchase-price-label-type">miles</span></label>
           <div class="input-with-toggle">
             <input type="text" inputmode="decimal" id="purchase-price" value="15" min="0" step="any" placeholder="e.g. 15">
             <div class="toggle" role="radiogroup" aria-label="Price unit">
@@ -175,12 +184,17 @@
               <button type="button" class="toggle-btn" data-value="per-unit" aria-pressed="false">Each</button>
             </div>
           </div>
+          <input type="range" class="range-slider" id="purchase-price-slider" min="5" max="30" step="1" value="15" tabindex="-1">
           <span class="hint">How much they are worth in cash (e.g., €15 per 1,000 or 0.015 each)</span>
         </div>
 
         <div class="field" style="max-width: 380px;">
-          <label for="min-buyable">Minimum points/miles block for purchase <span class="label-detail">(in thousands)</span></label>
-          <input type="text" inputmode="numeric" id="min-buyable" value="1" placeholder="e.g. 15">
+          <label for="min-buyable">Minimum <span id="min-buyable-label-type">miles</span> block for purchase <span class="label-detail">(in thousands)</span></label>
+          <div class="stepper-input" style="max-width: 250px;">
+            <button type="button" class="stepper-btn minus" data-target="min-buyable" tabindex="-1">&minus;</button>
+            <input type="text" inputmode="numeric" id="min-buyable" value="1" placeholder="e.g. 15">
+            <button type="button" class="stepper-btn plus" data-target="min-buyable" tabindex="-1">&plus;</button>
+          </div>
           <span class="hint">Enter 1 for 1,000 — enter 15 for 15,000</span>
           <span class="hint" id="min-buyable-preview"></span>
         </div>
@@ -189,7 +203,16 @@
         <div id="points-fields" class="conditional-fields hidden">
           <div class="field">
             <label for="transfer-ratio">Transfer ratio <span class="label-detail">(points to miles)</span></label>
-            <input type="text" id="transfer-ratio" placeholder="e.g. 1:1" value="1:1">
+            <div class="input-with-chips">
+              <input type="text" id="transfer-ratio" placeholder="e.g. 1:1" value="1:1">
+              <div class="preset-chips">
+                <button type="button" class="chip" data-target="transfer-ratio" data-value="1:1">1:1</button>
+                <button type="button" class="chip" data-target="transfer-ratio" data-value="5:4">5:4</button>
+                <button type="button" class="chip" data-target="transfer-ratio" data-value="3:2">3:2</button>
+                <button type="button" class="chip" data-target="transfer-ratio" data-value="2:1">2:1</button>
+                <button type="button" class="chip" data-target="transfer-ratio" data-value="3:1">3:1</button>
+              </div>
+            </div>
             <span class="hint">Accepted formats: 1:1, 5:4, 1000:750, 0.8, or 80%</span>
             <span class="hint" id="transfer-ratio-preview"></span>
           </div>
@@ -200,6 +223,7 @@
               <input type="text" inputmode="decimal" id="transfer-bonus" min="0" step="any" placeholder="e.g. 25" value="0">
               <span class="suffix">%</span>
             </div>
+            <input type="range" class="range-slider" id="transfer-bonus-slider" min="0" max="100" step="5" value="0" tabindex="-1">
             <span class="hint">Bonus when transferring to airline partners</span>
           </div>
         </div>

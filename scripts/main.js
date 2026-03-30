@@ -80,6 +80,8 @@
             updateEarningTypeUI();
           } else if (label === "Price unit") {
             state.priceUnit = value;
+            var purchaseSlider = document.getElementById("purchase-price-slider");
+            if (purchaseSlider) purchaseSlider.style.display = value === "per-unit" ? "none" : "";
           } else if (label === "Points fee period") {
             state.pointsFeePeriod = value;
           } else if (label === "Cashback fee period") {
@@ -142,6 +144,12 @@
     var label = isPoints ? "Points" : "Miles";
     els.colPointsHeader.textContent = label;
     els.goalColPointsHeader.textContent = label;
+
+    var typeLower = label.toLowerCase();
+    var purchasePriceLabel = document.getElementById("purchase-price-label-type");
+    if (purchasePriceLabel) purchasePriceLabel.textContent = typeLower;
+    var minBuyableLabel = document.getElementById("min-buyable-label-type");
+    if (minBuyableLabel) minBuyableLabel.textContent = typeLower;
   }
 
   // ── Input Helpers ───────────────────────────────────
@@ -329,6 +337,97 @@
     }
   }
 
+  // ── Ergonomics Setup ────────────────────────────────
+
+  function setupInputSelection() {
+    var inputs = document.querySelectorAll('input[type="text"]');
+    inputs.forEach(function (input) {
+      input.addEventListener("focus", function() {
+        var el = this;
+        setTimeout(function() {
+          if (document.activeElement === el) {
+            el.select();
+          }
+        }, 50);
+      });
+      
+      input.addEventListener("mouseup", function(e) {
+        // Prevent Safari from clearing the selection immediately after focus
+        if (this.selectionStart === 0 && this.selectionEnd === this.value.length) {
+          e.preventDefault();
+        }
+      });
+    });
+  }
+
+  function setupChips() {
+    var chips = document.querySelectorAll(".chip");
+    chips.forEach(function (chip) {
+      chip.addEventListener("click", function() {
+        var targetId = chip.getAttribute("data-target");
+        var val = chip.getAttribute("data-value");
+        var el = document.getElementById(targetId);
+        if (el) {
+          el.value = val;
+          calculate();
+        }
+      });
+    });
+  }
+
+  function setupSteppers() {
+    var buttons = document.querySelectorAll(".stepper-btn");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function() {
+        var targetId = btn.getAttribute("data-target");
+        var el = document.getElementById(targetId);
+        if (el) {
+          var val = parseDecimal(el.value);
+          if (isNaN(val)) val = 1;
+          if (btn.classList.contains("plus")) {
+            val += 1;
+          } else if (btn.classList.contains("minus")) {
+            val = Math.max(1, val - 1);
+          }
+          el.value = val;
+          calculate();
+          
+          // Trigger snap logic if this element has any
+          el.blur();
+        }
+      });
+    });
+  }
+
+  function setupSliders() {
+    var purchasePriceInput = document.getElementById("purchase-price");
+    var purchasePriceSlider = document.getElementById("purchase-price-slider");
+    var transferBonusInput = document.getElementById("transfer-bonus");
+    var transferBonusSlider = document.getElementById("transfer-bonus-slider");
+
+    if (purchasePriceInput && purchasePriceSlider) {
+      purchasePriceSlider.addEventListener("input", function() {
+        purchasePriceInput.value = purchasePriceSlider.value;
+        calculate();
+      });
+      purchasePriceInput.addEventListener("input", function() {
+        var val = parseDecimal(purchasePriceInput.value);
+        if (!isNaN(val)) purchasePriceSlider.value = val;
+      });
+    }
+
+    if (transferBonusInput && transferBonusSlider) {
+      transferBonusSlider.addEventListener("input", function() {
+        transferBonusInput.value = transferBonusSlider.value;
+        calculate();
+      });
+      transferBonusInput.addEventListener("input", function() {
+        var val = parseDecimal(transferBonusInput.value);
+        if (!isNaN(val)) transferBonusSlider.value = val;
+      });
+    }
+  }
+
   // ── Event Listeners ─────────────────────────────────
 
   function setupInputListeners() {
@@ -345,5 +444,9 @@
   setupSnapField(els.minBuyable, snapMinBuyable);
   setupSnapField(els.goalTarget, snapGoalTarget);
   setupInputListeners();
+  setupInputSelection();
+  setupChips();
+  setupSteppers();
+  setupSliders();
   calculate();
 })();
