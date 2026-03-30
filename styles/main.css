@@ -390,17 +390,26 @@ main {
   opacity: 0.5;
 }
 
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
 .card-icon {
   font-size: 1.4rem;
   width: 2.5rem;
   height: 2.5rem;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-xs);
   background: var(--gold-dim);
   border: 1px solid var(--border);
-  margin-bottom: 1rem;
 }
 
 .card h2 {
@@ -408,9 +417,9 @@ main {
   font-size: 1.25rem;
   font-weight: 400;
   color: var(--cream);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 /* ── Card-type accent stripes ───────────────────── */
@@ -704,9 +713,9 @@ input[type="text"]:focus {
   font-size: 1.3rem;
   font-weight: 400;
   color: var(--cream);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 /* ── Winner Banner ───────────────────────────────── */
