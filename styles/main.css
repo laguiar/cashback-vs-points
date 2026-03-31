@@ -436,6 +436,10 @@ main {
   border-left: 3px solid #91a8d0;
 }
 
+.card--miles-2 {
+  border-left: 3px solid #9b7dc8;
+}
+
 /* ── Fields ──────────────────────────────────────── */
 
 .field {
@@ -688,6 +692,82 @@ input[type="text"]:focus {
   background: var(--gold-dim);
   color: var(--gold);
   border: 1px solid var(--border);
+}
+
+/* ── Add / Remove Second Card ───────────────────── */
+
+.add-card-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.add-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--gold);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.add-card-btn:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  border-style: solid;
+}
+
+.remove-card-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 0.2rem 0.55rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.remove-card-btn:hover {
+  background: var(--negative-bg);
+  border-color: var(--negative);
+  color: var(--negative);
+}
+
+/* ── Card 2 Animated Wrapper ─────────────────────── */
+
+.card-2-wrapper {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.9s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.7s ease, margin-top 0.7s ease;
+}
+
+.card-2-wrapper.visible {
+  max-height: 1600px;
+  opacity: 1;
+  margin-top: 1.25rem;
+}
+
+/* ── Card 2 Column in Tables ─────────────────────── */
+
+.col-c2 {
+  display: none;
+}
+
+body.card2-active .col-c2 {
+  display: table-cell;
 }
 
 /* ── Results ─────────────────────────────────────── */

@@ -39,6 +39,17 @@
     goalBanner: document.getElementById("goal-banner"),
     goalBannerText: document.getElementById("goal-banner-text"),
     goalColPointsHeader: document.getElementById("goal-col-points-header"),
+    // Card 2
+    card2Wrapper: document.getElementById("card-2-wrapper"),
+    addCard2Btn: document.getElementById("add-card-2-btn"),
+    removeCard2Btn: document.getElementById("remove-card-2-btn"),
+    c2PointsCardFee: document.getElementById("c2-points-card-fee"),
+    c2EarningsRate: document.getElementById("c2-earnings-rate"),
+    c2PurchasePrice: document.getElementById("c2-purchase-price"),
+    c2TransferRatio: document.getElementById("c2-transfer-ratio"),
+    c2TransferBonus: document.getElementById("c2-transfer-bonus"),
+    c2MinBuyable: document.getElementById("c2-min-buyable"),
+    c2PointsFields: document.getElementById("c2-points-fields"),
   };
 
   // ── Toggle State ────────────────────────────────────
@@ -54,6 +65,10 @@
     cbFee15Period: "yearly",
     cbFee2Period: "yearly",
     cbFee3Period: "yearly",
+    card2Active: false,
+    c2EarningType: "miles",
+    c2PriceUnit: "per-thousand",
+    c2PointsFeePeriod: "yearly",
   };
 
   // ── Toggle Setup ────────────────────────────────────
@@ -94,6 +109,15 @@
             state.cbFee2Period = value;
           } else if (label === "CB 3% fee period") {
             state.cbFee3Period = value;
+          } else if (label === "C2 Points fee period") {
+            state.c2PointsFeePeriod = value;
+          } else if (label === "C2 Earning type") {
+            state.c2EarningType = value;
+            updateC2EarningTypeUI();
+          } else if (label === "C2 Price unit") {
+            state.c2PriceUnit = value;
+            var c2Slider = document.getElementById("c2-purchase-price-slider");
+            if (c2Slider) c2Slider.style.display = value === "per-unit" ? "none" : "";
           }
 
           calculate();
@@ -132,6 +156,13 @@
     calculate();
   }
 
+  function snapC2MinBuyable() {
+    var raw = parseDecimal(els.c2MinBuyable.value);
+    var val = isNaN(raw) || raw < 1 ? 1 : Math.round(raw);
+    els.c2MinBuyable.value = val;
+    calculate();
+  }
+
   function snapGoalTarget() {
     var raw = parseIntegerInput(els.goalTarget.value);
     els.goalTarget.value = formatNumber(snapToThousand(raw, 1000));
@@ -150,6 +181,41 @@
     if (purchasePriceLabel) purchasePriceLabel.textContent = typeLower;
     var minBuyableLabel = document.getElementById("min-buyable-label-type");
     if (minBuyableLabel) minBuyableLabel.textContent = typeLower;
+  }
+
+  function updateC2EarningTypeUI() {
+    var isPoints = state.c2EarningType === "points";
+    els.c2PointsFields.classList.toggle("hidden", !isPoints);
+    var label = isPoints ? "Points" : "Miles";
+    var colHeader = document.getElementById("col-c2-header");
+    if (colHeader) colHeader.textContent = "Card 2 \u2014 " + label;
+    var goalColHeader = document.getElementById("goal-col-c2-header");
+    if (goalColHeader) goalColHeader.textContent = "Card 2 \u2014 " + label;
+    var typeLower = label.toLowerCase();
+    var priceLabelEl = document.getElementById("c2-purchase-price-label-type");
+    if (priceLabelEl) priceLabelEl.textContent = typeLower;
+    var minBuyLabelEl = document.getElementById("c2-min-buyable-label-type");
+    if (minBuyLabelEl) minBuyLabelEl.textContent = typeLower;
+  }
+
+  // ── Card 2 Toggle ────────────────────────────────────
+
+  function setupCard2Toggle() {
+    els.addCard2Btn.addEventListener("click", function () {
+      state.card2Active = true;
+      els.card2Wrapper.classList.add("visible");
+      els.addCard2Btn.style.display = "none";
+      document.body.classList.add("card2-active");
+      calculate();
+    });
+
+    els.removeCard2Btn.addEventListener("click", function () {
+      state.card2Active = false;
+      els.card2Wrapper.classList.remove("visible");
+      els.addCard2Btn.style.display = "";
+      document.body.classList.remove("card2-active");
+      calculate();
+    });
   }
 
   // ── Input Helpers ───────────────────────────────────
@@ -172,7 +238,9 @@
     var cell = document.getElementById(id);
     if (!cell) return;
     cell.textContent = text;
+    var isColC2 = cell.classList.contains("col-c2");
     cell.className = classes || "";
+    if (isColC2) cell.classList.add("col-c2");
   }
 
   // ── Calculation Engine ──────────────────────────────
@@ -335,6 +403,83 @@
     } else {
       els.goalBanner.classList.add("hidden");
     }
+
+    // ── Card 2 Rendering ───────────────────────────
+    if (state.card2Active) {
+      var c2TransferRatio = parseTransferRatio(els.c2TransferRatio.value);
+      var r2 = runCalculation({
+        spendAmount: num(els.spendAmount),
+        spendPeriod: state.spendPeriod,
+        pointsCardFeeRaw: num(els.c2PointsCardFee),
+        pointsFeePeriod: state.c2PointsFeePeriod,
+        earningsRate: num(els.c2EarningsRate),
+        rawPrice: num(els.c2PurchasePrice),
+        priceUnit: state.c2PriceUnit,
+        earningType: state.c2EarningType,
+        transferRatio: c2TransferRatio,
+        transferBonus: num(els.c2TransferBonus),
+        annualCbFees: annualCbFees,
+        minBuyable: getMinBuyableValue(els.c2MinBuyable.value),
+        goalTarget: getGoalTargetValue(els.goalTarget.value),
+      });
+
+      var c2TransferPreview = document.getElementById("c2-transfer-ratio-preview");
+      if (c2TransferPreview) {
+        if (els.c2TransferRatio.value.trim() && !isNaN(c2TransferRatio)) {
+          c2TransferPreview.textContent = "= 1 point \u2192 " + c2TransferRatio.toFixed(4).replace(/0+$/, "").replace(/\.$/, "") + " miles";
+        } else {
+          c2TransferPreview.textContent = "";
+        }
+      }
+
+      var c2MinBuyPreview = document.getElementById("c2-min-buyable-preview");
+      if (c2MinBuyPreview) {
+        if (els.c2MinBuyable.value.trim() !== "") {
+          var c2EarningLabel = state.c2EarningType === "points" ? "points" : "miles";
+          c2MinBuyPreview.textContent = "= " + formatNumber(r2.minBuy) + " " + c2EarningLabel;
+        } else {
+          c2MinBuyPreview.textContent = "";
+        }
+      }
+
+      // Annual comparison column
+      setCell("r-c2-gross-annual", r2.grossMilesValue, false, false, true);
+      setCell("r-c2-net-annual", r2.netMilesValue, false, r2.netMilesValue < 0, true);
+      setCell("r-c2-net-monthly", r2.netMilesValue / 12, false, r2.netMilesValue < 0, true);
+
+      setCellRaw(
+        "r-c2-effective-cost",
+        spendAmount > 0 && r2.totalMiles > 0 ? formatCurrency(r2.pointsEffectiveCost * 1000) : "\u2014",
+        "cell-benchmark"
+      );
+
+      var c2Wins = spendAmount > 0 && r2.totalMiles > r.totalMiles;
+      setCellRaw(
+        "r-c2-miles-earned",
+        formatNumber(r2.totalMiles),
+        c2Wins ? "cell-benchmark cell-winner" : "cell-benchmark"
+      );
+
+      // Difference vs card 1 baseline
+      var c2DiffPct;
+      if (r.totalMiles === 0) {
+        c2DiffPct = r2.totalMiles > 0 ? "+\u221e" : "\u2014";
+      } else {
+        var c2Pct = ((r2.totalMiles - r.totalMiles) / r.totalMiles) * 100;
+        c2DiffPct = (c2Pct >= 0 ? "+" : "") + c2Pct.toFixed(1) + "%";
+      }
+      var c2DiffCls = "cell-diff";
+      if (spendAmount > 0 && r2.totalMiles > r.totalMiles) c2DiffCls += " cell-winner";
+      if (spendAmount > 0 && r2.totalMiles < r.totalMiles) c2DiffCls += " cell-negative";
+      setCellRaw("r-c2-diff", spendAmount > 0 ? c2DiffPct : "\u2014", c2DiffCls);
+
+      // Goal accumulation column
+      var g2 = r2.goal;
+      var c2GoalWins = spendAmount > 0 && g2.pointsMonths > 0 && g.pointsMonths > 0 && g2.pointsMonths < g.pointsMonths;
+      setCellRaw("g-c2-months", spendAmount > 0 && g2.pointsMonths > 0 ? g2.pointsMonths + " mo" : "\u2014", c2GoalWins ? "cell-benchmark cell-winner" : "cell-benchmark");
+      setCellRaw("g-c2-spend", spendAmount > 0 && g2.pointsMonths > 0 ? formatCurrency(g2.pointsSpend) : "\u2014", c2GoalWins ? "cell-benchmark cell-winner" : "cell-benchmark");
+      setCellRaw("g-c2-fees", spendAmount > 0 && g2.pointsMonths > 0 ? formatCurrency(g2.pointsFees) : "\u2014", c2GoalWins ? "cell-benchmark cell-winner" : "cell-benchmark");
+    }
   }
 
   // ── Ergonomics Setup ────────────────────────────────
@@ -426,6 +571,33 @@
         if (!isNaN(val)) transferBonusSlider.value = val;
       });
     }
+
+    var c2PriceInput = document.getElementById("c2-purchase-price");
+    var c2PriceSlider = document.getElementById("c2-purchase-price-slider");
+    var c2BonusInput = document.getElementById("c2-transfer-bonus");
+    var c2BonusSlider = document.getElementById("c2-transfer-bonus-slider");
+
+    if (c2PriceInput && c2PriceSlider) {
+      c2PriceSlider.addEventListener("input", function() {
+        c2PriceInput.value = c2PriceSlider.value;
+        calculate();
+      });
+      c2PriceInput.addEventListener("input", function() {
+        var val = parseDecimal(c2PriceInput.value);
+        if (!isNaN(val)) c2PriceSlider.value = val;
+      });
+    }
+
+    if (c2BonusInput && c2BonusSlider) {
+      c2BonusSlider.addEventListener("input", function() {
+        c2BonusInput.value = c2BonusSlider.value;
+        calculate();
+      });
+      c2BonusInput.addEventListener("input", function() {
+        var val = parseDecimal(c2BonusInput.value);
+        if (!isNaN(val)) c2BonusSlider.value = val;
+      });
+    }
   }
 
   // ── Event Listeners ─────────────────────────────────
@@ -441,7 +613,9 @@
 
   setupToggles();
   setupPerRateFees();
+  setupCard2Toggle();
   setupSnapField(els.minBuyable, snapMinBuyable);
+  setupSnapField(els.c2MinBuyable, snapC2MinBuyable);
   setupSnapField(els.goalTarget, snapGoalTarget);
   setupInputListeners();
   setupInputSelection();

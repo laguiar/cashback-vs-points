@@ -236,6 +236,113 @@
       </section>
     </div>
 
+    <!-- Add Second Travel Card -->
+    <div class="add-card-row" id="add-card-row">
+      <button type="button" class="add-card-btn" id="add-card-2-btn">
+        &#9992; Add second travel card to compare
+      </button>
+    </div>
+
+    <!-- Second Travel Card (hidden until toggled) -->
+    <div class="card-2-wrapper" id="card-2-wrapper">
+      <section class="card card--miles card--miles-2">
+        <div class="card-header">
+          <div class="card-icon">&#9992;</div>
+          <h2>Your Second Travel Card</h2>
+          <button type="button" class="remove-card-btn" id="remove-card-2-btn" title="Remove second card">&times;</button>
+        </div>
+        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: -0.5rem; margin-bottom: 1.25rem;">Compare a second points or miles card side by side with your first.</p>
+
+        <div class="field">
+          <label for="c2-points-card-fee">Card fee</label>
+          <div class="input-with-toggle">
+            <input type="text" inputmode="decimal" id="c2-points-card-fee" min="0" step="any" placeholder="e.g. 250" value="0">
+            <div class="toggle" role="radiogroup" aria-label="C2 Points fee period">
+              <button type="button" class="toggle-btn" data-value="monthly" aria-pressed="false">Monthly</button>
+              <button type="button" class="toggle-btn active" data-value="yearly" aria-pressed="true">Yearly</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Earning type</label>
+          <div class="toggle" role="radiogroup" aria-label="C2 Earning type">
+            <button type="button" class="toggle-btn active" data-value="miles" aria-pressed="true">Airline Miles</button>
+            <button type="button" class="toggle-btn" data-value="points" aria-pressed="false">Points</button>
+          </div>
+          <span class="hint" style="margin-top: 0.6rem;"><strong>Miles:</strong> Co-branded airline cards (e.g. Delta SkyMiles, Lufthansa Miles &amp; More).<br><strong>Points:</strong> Transferable bank rewards (e.g. Revolut, Chase).</span>
+        </div>
+
+        <div class="field">
+          <label for="c2-earnings-rate">Rewards earned per 1 (€$£) spent</label>
+          <div class="input-with-chips">
+            <input type="text" inputmode="decimal" id="c2-earnings-rate" value="1.0" min="0" step="any" placeholder="e.g. 1.5">
+            <div class="preset-chips">
+              <button type="button" class="chip" data-target="c2-earnings-rate" data-value="0.5">0.5</button>
+              <button type="button" class="chip" data-target="c2-earnings-rate" data-value="1.0">1.0</button>
+              <button type="button" class="chip" data-target="c2-earnings-rate" data-value="1.5">1.5</button>
+              <button type="button" class="chip" data-target="c2-earnings-rate" data-value="2.0">2.0</button>
+              <button type="button" class="chip" data-target="c2-earnings-rate" data-value="3.0">3.0</button>
+            </div>
+          </div>
+          <span class="hint">Points or miles earned per unit spent (e.g. 0.5, 1.5 or 2)</span>
+        </div>
+
+        <div class="field">
+          <label for="c2-purchase-price">Estimated purchase value of <span id="c2-purchase-price-label-type">miles</span></label>
+          <div class="input-with-toggle">
+            <input type="text" inputmode="decimal" id="c2-purchase-price" value="15" min="0" step="any" placeholder="e.g. 15">
+            <div class="toggle" role="radiogroup" aria-label="C2 Price unit">
+              <button type="button" class="toggle-btn active" data-value="per-thousand" aria-pressed="true">Per 1,000</button>
+              <button type="button" class="toggle-btn" data-value="per-unit" aria-pressed="false">Each</button>
+            </div>
+          </div>
+          <input type="range" class="range-slider" id="c2-purchase-price-slider" min="5" max="30" step="1" value="15" tabindex="-1">
+          <span class="hint">How much they are worth in cash (e.g., €15 per 1,000 or 0.015 each)</span>
+        </div>
+
+        <div class="field" style="max-width: 380px;">
+          <label for="c2-min-buyable">Minimum <span id="c2-min-buyable-label-type">miles</span> block for purchase <span class="label-detail">(in thousands)</span></label>
+          <div class="stepper-input" style="max-width: 250px;">
+            <button type="button" class="stepper-btn minus" data-target="c2-min-buyable" tabindex="-1">&minus;</button>
+            <input type="text" inputmode="numeric" id="c2-min-buyable" value="1" placeholder="e.g. 15">
+            <button type="button" class="stepper-btn plus" data-target="c2-min-buyable" tabindex="-1">&plus;</button>
+          </div>
+          <span class="hint">Enter 1 for 1,000 — enter 15 for 15,000</span>
+          <span class="hint" id="c2-min-buyable-preview"></span>
+        </div>
+
+        <!-- Points-specific fields for card 2 -->
+        <div id="c2-points-fields" class="conditional-fields hidden">
+          <div class="field">
+            <label for="c2-transfer-ratio">Transfer ratio <span class="label-detail">(points to miles)</span></label>
+            <div class="input-with-chips">
+              <input type="text" id="c2-transfer-ratio" placeholder="e.g. 1:1" value="1:1">
+              <div class="preset-chips">
+                <button type="button" class="chip" data-target="c2-transfer-ratio" data-value="1:1">1:1</button>
+                <button type="button" class="chip" data-target="c2-transfer-ratio" data-value="5:4">5:4</button>
+                <button type="button" class="chip" data-target="c2-transfer-ratio" data-value="3:2">3:2</button>
+                <button type="button" class="chip" data-target="c2-transfer-ratio" data-value="2:1">2:1</button>
+                <button type="button" class="chip" data-target="c2-transfer-ratio" data-value="3:1">3:1</button>
+              </div>
+            </div>
+            <span class="hint">Accepted formats: 1:1, 5:4, 1000:750, 0.8, or 80%</span>
+            <span class="hint" id="c2-transfer-ratio-preview"></span>
+          </div>
+
+          <div class="field">
+            <label for="c2-transfer-bonus">Transfer bonus <span class="label-detail">(optional)</span></label>
+            <div class="input-with-suffix">
+              <input type="text" inputmode="decimal" id="c2-transfer-bonus" min="0" step="any" placeholder="e.g. 25" value="0">
+              <span class="suffix">%</span>
+            </div>
+            <input type="range" class="range-slider" id="c2-transfer-bonus-slider" min="0" max="100" step="5" value="0" tabindex="-1">
+            <span class="hint">Bonus when transferring to airline partners</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <!-- Results Section -->
     <section id="results" class="results-section">
       <div class="card-header">
@@ -254,6 +361,7 @@
             <tr>
               <th>Metric</th>
               <th id="col-points-header">Miles</th>
+              <th class="col-c2" id="col-c2-header">Card 2</th>
               <th>CB 1%</th>
               <th>CB 1.5%</th>
               <th>CB 2%</th>
@@ -264,6 +372,7 @@
             <tr>
               <td>Total value earned</td>
               <td id="r-points-gross-annual">&mdash;</td>
+              <td id="r-c2-gross-annual" class="col-c2">&mdash;</td>
               <td id="r-cb1-gross-annual">&mdash;</td>
               <td id="r-cb15-gross-annual">&mdash;</td>
               <td id="r-cb2-gross-annual">&mdash;</td>
@@ -272,6 +381,7 @@
             <tr class="row-highlight">
               <td>Net annual value <span class="hint-inline" title="Total value earned minus annual card fee"> (?)</span></td>
               <td id="r-points-net-annual">&mdash;</td>
+              <td id="r-c2-net-annual" class="col-c2">&mdash;</td>
               <td id="r-cb1-net-annual">&mdash;</td>
               <td id="r-cb15-net-annual">&mdash;</td>
               <td id="r-cb2-net-annual">&mdash;</td>
@@ -280,6 +390,7 @@
             <tr>
               <td>Net monthly value</td>
               <td id="r-points-net-monthly">&mdash;</td>
+              <td id="r-c2-net-monthly" class="col-c2">&mdash;</td>
               <td id="r-cb1-net-monthly">&mdash;</td>
               <td id="r-cb15-net-monthly">&mdash;</td>
               <td id="r-cb2-net-monthly">&mdash;</td>
@@ -288,6 +399,7 @@
             <tr class="row-separator">
               <td>Effective cost per 1k miles</td>
               <td id="r-points-effective-cost">&mdash;</td>
+              <td id="r-c2-effective-cost" class="col-c2">&mdash;</td>
               <td id="r-cb1-effective-cost">&mdash;</td>
               <td id="r-cb15-effective-cost">&mdash;</td>
               <td id="r-cb2-effective-cost">&mdash;</td>
@@ -296,6 +408,7 @@
             <tr class="row-separator">
               <td id="r-miles-earned-label">Miles earned</td>
               <td id="r-points-miles-earned">&mdash;</td>
+              <td id="r-c2-miles-earned" class="col-c2">&mdash;</td>
               <td id="r-cb1-miles-buyable">&mdash;</td>
               <td id="r-cb15-miles-buyable">&mdash;</td>
               <td id="r-cb2-miles-buyable">&mdash;</td>
@@ -306,6 +419,7 @@
             <tr>
               <td>Difference</td>
               <td id="r-points-diff">&mdash;</td>
+              <td id="r-c2-diff" class="col-c2">&mdash;</td>
               <td id="r-cb1-diff">&mdash;</td>
               <td id="r-cb15-diff">&mdash;</td>
               <td id="r-cb2-diff">&mdash;</td>
@@ -340,6 +454,7 @@
             <tr>
               <th>Metric</th>
               <th id="goal-col-points-header">Miles</th>
+              <th class="col-c2" id="goal-col-c2-header">Card 2</th>
               <th>CB 1%</th>
               <th>CB 1.5%</th>
               <th>CB 2%</th>
@@ -350,6 +465,7 @@
             <tr>
               <td>Months to goal</td>
               <td id="g-points-months">&mdash;</td>
+              <td id="g-c2-months" class="col-c2">&mdash;</td>
               <td id="g-cb1-months">&mdash;</td>
               <td id="g-cb15-months">&mdash;</td>
               <td id="g-cb2-months">&mdash;</td>
@@ -358,6 +474,7 @@
             <tr>
               <td>Total spend</td>
               <td id="g-points-spend">&mdash;</td>
+              <td id="g-c2-spend" class="col-c2">&mdash;</td>
               <td id="g-cb1-spend">&mdash;</td>
               <td id="g-cb15-spend">&mdash;</td>
               <td id="g-cb2-spend">&mdash;</td>
@@ -366,6 +483,7 @@
             <tr>
               <td>Total fees paid</td>
               <td id="g-points-fees">&mdash;</td>
+              <td id="g-c2-fees" class="col-c2">&mdash;</td>
               <td id="g-cb1-fees">&mdash;</td>
               <td id="g-cb15-fees">&mdash;</td>
               <td id="g-cb2-fees">&mdash;</td>
