@@ -891,14 +891,14 @@ body.card2-active .col-c2 {
   font-weight: 600;
 }
 
-.results-table td.cell-negative {
-  color: var(--negative);
-}
-
 .results-table td.cell-benchmark {
   background: var(--gold-dim);
   color: #5a77b3; /* Darker tinted blue for readability */
   font-weight: 600;
+}
+
+.results-table td.cell-negative {
+  color: var(--negative);
 }
 
 .results-table .row-separator td {

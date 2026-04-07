@@ -602,6 +602,18 @@
 
   // ── Event Listeners ─────────────────────────────────
 
+  function setupHintInline() {
+    var hints = document.querySelectorAll(".hint-inline");
+    hints.forEach(function (hint) {
+      hint.addEventListener("click", function() {
+        var text = hint.getAttribute("title");
+        if (text) {
+          alert(text);
+        }
+      });
+    });
+  }
+
   function setupInputListeners() {
     var inputs = document.querySelectorAll('input[type="text"]');
     inputs.forEach(function (input) {
@@ -617,6 +629,7 @@
   setupSnapField(els.minBuyable, snapMinBuyable);
   setupSnapField(els.c2MinBuyable, snapC2MinBuyable);
   setupSnapField(els.goalTarget, snapGoalTarget);
+  setupHintInline();
   setupInputListeners();
   setupInputSelection();
   setupChips();
