@@ -39,6 +39,13 @@
     goalBanner: document.getElementById("goal-banner"),
     goalBannerText: document.getElementById("goal-banner-text"),
     goalColPointsHeader: document.getElementById("goal-col-points-header"),
+    purchaseBonus: document.getElementById("purchase-bonus"),
+    purchaseBonusWrapper: document.getElementById("purchase-bonus-wrapper"),
+    purchaseBonusHint: document.getElementById("purchase-bonus-hint"),
+    c2PurchaseBonus: document.getElementById("c2-purchase-bonus"),
+    c2PurchaseBonusWrapper: document.getElementById("c2-purchase-bonus-wrapper"),
+    c2PurchaseBonusHint: document.getElementById("c2-purchase-bonus-hint"),
+    cashbackGoalTarget: document.getElementById("cashback-goal-target"),
     // Card 2
     card2Wrapper: document.getElementById("card-2-wrapper"),
     addCard2Btn: document.getElementById("add-card-2-btn"),
@@ -69,6 +76,8 @@
     c2EarningType: "miles",
     c2PriceUnit: "per-thousand",
     c2PointsFeePeriod: "yearly",
+    purchaseBonusType: "none",
+    c2PurchaseBonusType: "none",
   };
 
   // ── Toggle Setup ────────────────────────────────────
@@ -118,6 +127,12 @@
             state.c2PriceUnit = value;
             var c2Slider = document.getElementById("c2-purchase-price-slider");
             if (c2Slider) c2Slider.style.display = value === "per-unit" ? "none" : "";
+          } else if (label === "Purchase promo type") {
+            state.purchaseBonusType = value;
+            updatePurchaseBonusUI();
+          } else if (label === "C2 Purchase promo type") {
+            state.c2PurchaseBonusType = value;
+            updateC2PurchaseBonusUI();
           }
 
           calculate();
@@ -169,6 +184,13 @@
     calculate();
   }
 
+  function snapCashbackGoalTarget() {
+    var raw = parseIntegerInput(els.cashbackGoalTarget.value);
+    var val = isNaN(raw) || raw <= 0 ? 500 : Math.round(raw);
+    els.cashbackGoalTarget.value = formatNumber(val);
+    calculate();
+  }
+
   function updateEarningTypeUI() {
     var isPoints = state.earningType === "points";
     els.pointsFields.classList.toggle("hidden", !isPoints);
@@ -181,6 +203,7 @@
     if (purchasePriceLabel) purchasePriceLabel.textContent = typeLower;
     var minBuyableLabel = document.getElementById("min-buyable-label-type");
     if (minBuyableLabel) minBuyableLabel.textContent = typeLower;
+    updatePurchaseBonusHint();
   }
 
   function updateC2EarningTypeUI() {
@@ -196,6 +219,43 @@
     if (priceLabelEl) priceLabelEl.textContent = typeLower;
     var minBuyLabelEl = document.getElementById("c2-min-buyable-label-type");
     if (minBuyLabelEl) minBuyLabelEl.textContent = typeLower;
+    updateC2PurchaseBonusHint();
+  }
+
+  function updatePurchaseBonusHint() {
+    var val = num(els.purchaseBonus);
+    var label = state.earningType === "points" ? "points" : "miles";
+    if (state.purchaseBonusType === "none") {
+      els.purchaseBonusHint.textContent = "No active promotion on purchases";
+    } else if (state.purchaseBonusType === "miles") {
+      els.purchaseBonusHint.textContent = "Buy 10,000, get " + formatNumber(10000 * (1 + val / 100)) + " " + label + " total (+" + val + "% bonus)";
+    } else if (state.purchaseBonusType === "discount") {
+      els.purchaseBonusHint.textContent = val + "% discount applied to purchase price";
+    }
+  }
+
+  function updateC2PurchaseBonusHint() {
+    var val = num(els.c2PurchaseBonus);
+    var label = state.c2EarningType === "points" ? "points" : "miles";
+    if (state.c2PurchaseBonusType === "none") {
+      els.c2PurchaseBonusHint.textContent = "No active promotion on purchases";
+    } else if (state.c2PurchaseBonusType === "miles") {
+      els.c2PurchaseBonusHint.textContent = "Buy 10,000, get " + formatNumber(10000 * (1 + val / 100)) + " " + label + " total (+" + val + "% bonus)";
+    } else if (state.c2PurchaseBonusType === "discount") {
+      els.c2PurchaseBonusHint.textContent = val + "% discount applied to purchase price";
+    }
+  }
+
+  function updatePurchaseBonusUI() {
+    var isNone = state.purchaseBonusType === "none";
+    els.purchaseBonusWrapper.classList.toggle("hidden", isNone);
+    updatePurchaseBonusHint();
+  }
+
+  function updateC2PurchaseBonusUI() {
+    var isNone = state.c2PurchaseBonusType === "none";
+    els.c2PurchaseBonusWrapper.classList.toggle("hidden", isNone);
+    updateC2PurchaseBonusHint();
   }
 
   // ── Card 2 Toggle ────────────────────────────────────
@@ -248,6 +308,8 @@
   var cbPrefixes = ["r-cb1", "r-cb15", "r-cb2", "r-cb3"];
 
   function calculate() {
+    updatePurchaseBonusHint();
+    updateC2PurchaseBonusHint();
     var sharedCbFeeRaw = num(els.cashbackCardFee);
     var sharedCbFee = state.cashbackFeePeriod === "monthly" ? sharedCbFeeRaw * 12 : sharedCbFeeRaw;
     var annualCbFees = resolveAnnualCbFees(state.perRateFees, sharedCbFee, [
@@ -273,6 +335,9 @@
       annualCbFees: annualCbFees,
       minBuyable: getMinBuyableValue(els.minBuyable.value),
       goalTarget: getGoalTargetValue(els.goalTarget.value),
+      purchaseBonusType: state.purchaseBonusType,
+      purchaseBonusValue: num(els.purchaseBonus),
+      cashbackGoal: parseIntegerInput(els.cashbackGoalTarget.value),
     });
 
     // Transfer ratio preview
@@ -404,6 +469,18 @@
       els.goalBanner.classList.add("hidden");
     }
 
+    // ── Cashback Accumulation Rendering ───────────
+    var cbGoalPrefix = ["g-cb1-cb", "g-cb15-cb", "g-cb2-cb", "g-cb3-cb"];
+    var cg = r.cbGoal;
+
+    cg.cbData.forEach(function (d, i) {
+      var prefix = cbGoalPrefix[i];
+      var show = spendAmount > 0 && d.months > 0;
+      setCellRaw(prefix + "-months", show ? d.months + " mo" : "\u2014", "");
+      setCellRaw(prefix + "-spend", show ? formatCurrency(d.spend) : "\u2014", "");
+      setCellRaw(prefix + "-fees", show ? formatCurrency(d.fees) : "\u2014", "");
+    });
+
     // ── Card 2 Rendering ───────────────────────────
     if (state.card2Active) {
       var c2TransferRatio = parseTransferRatio(els.c2TransferRatio.value);
@@ -421,6 +498,9 @@
         annualCbFees: annualCbFees,
         minBuyable: getMinBuyableValue(els.c2MinBuyable.value),
         goalTarget: getGoalTargetValue(els.goalTarget.value),
+        purchaseBonusType: state.c2PurchaseBonusType,
+        purchaseBonusValue: num(els.c2PurchaseBonus),
+        cashbackGoal: parseIntegerInput(els.cashbackGoalTarget.value),
       });
 
       var c2TransferPreview = document.getElementById("c2-transfer-ratio-preview");
@@ -629,6 +709,7 @@
   setupSnapField(els.minBuyable, snapMinBuyable);
   setupSnapField(els.c2MinBuyable, snapC2MinBuyable);
   setupSnapField(els.goalTarget, snapGoalTarget);
+  setupSnapField(els.cashbackGoalTarget, snapCashbackGoalTarget);
   setupHintInline();
   setupInputListeners();
   setupInputSelection();

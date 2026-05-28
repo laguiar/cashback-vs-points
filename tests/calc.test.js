@@ -983,3 +983,96 @@ describe("calculate — integration scenarios", () => {
     expect(r.cbMilesBuyable[3]).toBe(720000);
   });
 });
+
+describe("calculate — purchase promotions", () => {
+  it("applies no promo by default", () => {
+    var r = calculate(makeInputs({
+      spendAmount: 2000,
+      spendPeriod: "monthly",
+      rawPrice: 12,
+      priceUnit: "per-thousand",
+      minBuyable: 1000,
+      purchaseBonusType: "none",
+      purchaseBonusValue: 50,
+    }));
+    expect(r.effectiveBuyPricePerUnit).toBe(0.012);
+    // CB 1%: gross=240, buyable = 240 / 0.012 = 20000
+    expect(r.cbMilesBuyable[0]).toBe(20000);
+  });
+
+  it("applies discount promo correctly", () => {
+    var r = calculate(makeInputs({
+      spendAmount: 2000,
+      spendPeriod: "monthly",
+      rawPrice: 12,
+      priceUnit: "per-thousand",
+      minBuyable: 1000,
+      purchaseBonusType: "discount",
+      purchaseBonusValue: 30, // 30% discount
+    }));
+    // 0.012 * 0.7 = 0.0084
+    expect(r.effectiveBuyPricePerUnit).toBeCloseTo(0.0084);
+    // CB 1%: gross=240, buyable = floor((240 / 0.0084) / 1000) * 1000 = 28000
+    expect(r.cbMilesBuyable[0]).toBe(28000);
+    // Goal 50000 miles: cost = 50000 * 0.0084 = 420
+    expect(r.goal.goalCost).toBeCloseTo(420);
+  });
+
+  it("applies miles bonus promo correctly", () => {
+    var r = calculate(makeInputs({
+      spendAmount: 2000,
+      spendPeriod: "monthly",
+      rawPrice: 12,
+      priceUnit: "per-thousand",
+      minBuyable: 1000,
+      purchaseBonusType: "miles",
+      purchaseBonusValue: 50, // 50% bonus miles
+    }));
+    // 0.012 / 1.5 = 0.008
+    expect(r.effectiveBuyPricePerUnit).toBeCloseTo(0.008);
+    // CB 1%: gross=240. Base miles = floor((240 / 0.012) / 1000) * 1000 = 20000
+    // Total miles with bonus = 20000 * 1.5 = 30000
+    expect(r.cbMilesBuyable[0]).toBe(30000);
+    // Goal 50000 miles: cost = 50000 * 0.008 = 400
+    expect(r.goal.goalCost).toBeCloseTo(400);
+  });
+});
+
+describe("calculate — cashback goal accumulation", () => {
+  it("calculates months to reach cashback goal for travel card and cashback rates", () => {
+    var r = calculate(makeInputs({
+      spendAmount: 2000,
+      spendPeriod: "monthly",
+      earningsRate: 1.5,
+      rawPrice: 12,
+      priceUnit: "per-thousand",
+      pointsCardFeeRaw: 240,
+      pointsFeePeriod: "yearly",
+      annualCbFees: [120, 120, 120, 120],
+      cashbackGoal: 600,
+    }));
+    // monthlyMiles = 3000; miles value = 3000 * 0.012 = 36
+    // months for points card = ceil(600 / 36) = 17 months
+    expect(r.cbGoal.pointsMonths).toBe(17);
+    expect(r.cbGoal.pointsSpend).toBe(34000); // 17 * 2000
+    expect(r.cbGoal.pointsFees).toBe(480); // ceil(17/12) = 2 years -> 2 * 240
+
+    // CB 1%: monthlyCb = 20; ceil(600 / 20) = 30 months
+    expect(r.cbGoal.cbData[0].months).toBe(30);
+    expect(r.cbGoal.cbData[0].spend).toBe(60000);
+    expect(r.cbGoal.cbData[0].fees).toBe(360); // ceil(30/12) = 3 years -> 3 * 120
+
+    // CB 3%: monthlyCb = 60; ceil(600 / 60) = 10 months
+    expect(r.cbGoal.cbData[3].months).toBe(10);
+    expect(r.cbGoal.cbData[3].spend).toBe(20000);
+    expect(r.cbGoal.cbData[3].fees).toBe(120); // ceil(10/12) = 1 year -> 120
+  });
+
+  it("handles cashbackGoal of 0 or negative", () => {
+    var r = calculate(makeInputs({ cashbackGoal: 0 }));
+    expect(r.cbGoal.pointsMonths).toBe(0);
+    r.cbGoal.cbData.forEach(d => {
+      expect(d.months).toBe(0);
+    });
+  });
+});

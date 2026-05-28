@@ -616,6 +616,26 @@ input[type="text"]:focus {
   color: var(--gold-light);
 }
 
+.hidden {
+  display: none !important;
+}
+
+.input-with-toggle-and-input {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.input-with-toggle-and-input .toggle {
+  flex-shrink: 0;
+}
+
+.input-with-toggle-and-input .input-with-suffix {
+  flex-shrink: 0;
+  max-width: 140px;
+}
+
 /* ── Checkbox Toggle Label ───────────────────────── */
 
 .toggle-label-row {

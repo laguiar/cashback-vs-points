@@ -205,6 +205,22 @@
           <span class="hint" id="min-buyable-preview"></span>
         </div>
 
+        <div class="field">
+          <label>Purchase promotion</label>
+          <div class="input-with-toggle-and-input">
+            <div class="toggle" role="radiogroup" aria-label="Purchase promo type">
+              <button type="button" class="toggle-btn active" data-value="none" aria-pressed="true">No Promo</button>
+              <button type="button" class="toggle-btn" data-value="miles" aria-pressed="false">Bonus Miles</button>
+              <button type="button" class="toggle-btn" data-value="discount" aria-pressed="false">Discount</button>
+            </div>
+            <div class="input-with-suffix hidden" id="purchase-bonus-wrapper" style="margin-left: 0.5rem; display: inline-flex;">
+              <input type="text" inputmode="decimal" id="purchase-bonus" min="0" step="any" placeholder="e.g. 50" value="0">
+              <span class="suffix">%</span>
+            </div>
+          </div>
+          <span class="hint" id="purchase-bonus-hint">No active promotion on purchases</span>
+        </div>
+
         <!-- Points-specific fields -->
         <div id="points-fields" class="conditional-fields hidden">
           <div class="field">
@@ -310,6 +326,22 @@
           </div>
           <span class="hint">Enter 1 for 1,000 — enter 15 for 15,000</span>
           <span class="hint" id="c2-min-buyable-preview"></span>
+        </div>
+
+        <div class="field">
+          <label>Purchase promotion</label>
+          <div class="input-with-toggle-and-input">
+            <div class="toggle" role="radiogroup" aria-label="C2 Purchase promo type">
+              <button type="button" class="toggle-btn active" data-value="none" aria-pressed="true">No Promo</button>
+              <button type="button" class="toggle-btn" data-value="miles" aria-pressed="false">Bonus Miles</button>
+              <button type="button" class="toggle-btn" data-value="discount" aria-pressed="false">Discount</button>
+            </div>
+            <div class="input-with-suffix hidden" id="c2-purchase-bonus-wrapper" style="margin-left: 0.5rem; display: inline-flex;">
+              <input type="text" inputmode="decimal" id="c2-purchase-bonus" min="0" step="any" placeholder="e.g. 50" value="0">
+              <span class="suffix">%</span>
+            </div>
+          </div>
+          <span class="hint" id="c2-purchase-bonus-hint">No active promotion on purchases</span>
         </div>
 
         <!-- Points-specific fields for card 2 -->
@@ -488,6 +520,57 @@
               <td id="g-cb15-fees">&mdash;</td>
               <td id="g-cb2-fees">&mdash;</td>
               <td id="g-cb3-fees">&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Cashback Accumulation Section -->
+    <section id="cb-goal-section" class="results-section results-section--goal">
+      <div class="card-header">
+        <div class="card-icon">&#128184;</div>
+        <h2>Cashback Accumulation</h2>
+      </div>
+
+      <div class="field" style="max-width: 320px; margin-bottom: 1.5rem;">
+        <label for="cashback-goal-target">Target cashback to accumulate</label>
+        <input type="text" inputmode="numeric" id="cashback-goal-target" value="500" placeholder="e.g. 500">
+        <span class="hint">Target amount in your currency</span>
+      </div>
+
+      <div class="results-table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>CB 1%</th>
+              <th>CB 1.5%</th>
+              <th>CB 2%</th>
+              <th>CB 3%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Months to goal</td>
+              <td id="g-cb1-cb-months">&mdash;</td>
+              <td id="g-cb15-cb-months">&mdash;</td>
+              <td id="g-cb2-cb-months">&mdash;</td>
+              <td id="g-cb3-cb-months">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Total spend</td>
+              <td id="g-cb1-cb-spend">&mdash;</td>
+              <td id="g-cb15-cb-spend">&mdash;</td>
+              <td id="g-cb2-cb-spend">&mdash;</td>
+              <td id="g-cb3-cb-spend">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Total fees paid</td>
+              <td id="g-cb1-cb-fees">&mdash;</td>
+              <td id="g-cb15-cb-fees">&mdash;</td>
+              <td id="g-cb2-cb-fees">&mdash;</td>
+              <td id="g-cb3-cb-fees">&mdash;</td>
             </tr>
           </tbody>
         </table>
